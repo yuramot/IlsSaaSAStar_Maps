@@ -1,0 +1,120 @@
+-------------------------------------------работа с дорогами---------------
+запрос дорог по прямоугольнику по типам дорог
+{"Type":"UpdateRoads","Features":[{"UpdateType":0,"Border":"GWucftpynxvh2hucfv0su18j2n","RoadType":[11,12,13,14,15,16,21,22,31,32,41,42,43],"Join":1}],"Account":{"Current":"2","Parents":["1"]}}
+ответ, список дорог типа:
+{"Type":"FeatureCollection","Features":[{"Type":"Feature","Properties":{"ID":"179946614-949655909339565487-949655915538457152","Speed":"60","RoadType":"15","OneWay":"1","Name":"Москворецкая набережная"},"Geometry":{"Type":"LineString","Coordinates":["GWucfv0kghk3egucfv0kgk410uucfv0kge9xjnucfv0kgg647ducfv0ku4g3b7ucfv0ku9cv0bucfv0kubzvxwucfv0ktxbbzhucfv0ktxe5gpucfv0kxej1fmucfv0kxdzj4wucfv0kxfb4syucfv0s82ysv1ucfv0s8898k0"]}},{"Type":"Feature","Properties":{"ID":"607737609-949655910345069770-949655910344768406","Speed":"60","RoadType":"15","OneWay":"1","Name":"площадь Варварские Ворота"},"Geometry":{"Type":"LineString","Coordinates":["GWucfv0meggp6bucfv0meg6fwq"]}}]}
+
+изменение типа дорог, скорости, имен по списку ID
+{"Type":"UpdateRoads","Features":[{"UpdateType":1,"Properties":{"RoadType":21,"Speed":60,"OneWay":1,"Name":"Road Name"},"Road":{"ID":["36212985-939554108905766172-939554475660076967","36212987-939554108905755555-939554475660073333","36212988-939554108905766666-939554475660071111"]}}]}
+ответ
+{"Result":"Ok"} или {"Result":"Error"}
+но можно переделать на список дорог с новыми данными
+
+изменение типа дороги, скорости, имени и геометрии без изменения начальной и конечной точек по ID
+{"Type":"UpdateRoads","Features":[{"UpdateType":2,"Road":[{"RoadType":21,"Speed":60,"OneWay":1,"Name":"Road Name","ID":"36212985-939554108905766172-939554475660076967","Way":"GWu2gqzfrcs3u2u2gqzfreq62mu2gqzfreu0wn"}]}]}
+ответ
+измененная дорога с новыми данными
+
+удаление дорог по списку ID
+{"Type":"UpdateRoads","Features":[{"UpdateType":3,"Road":{"ID":["36212985-939554108905766172-939554475660076967","36212987-939554108905755555-939554475660073333","36212988-939554108905766666-939554475660071111"]}}]}
+ответ 
+{"Result":"Ok"} или {"Result":"Error"}
+
+создание новой дороги по userID
+{"Type":"UpdateRoads","Features":[{"UpdateType":4,"Road":[{"userID":1,"RoadType":21,"Speed":60,"OneWay":1,"Name":"Road Name","Way":"GWu2gqzfrcs3u2u2gqzfreq62mu2gqzfreu0wn"}]}]}
+ответ
+дорога с новыми данными
+
+преобразование односторонней дороги в двусторонюю
+{"Type":"UpdateRoads","Features":[{"UpdateType":6,"Road":{"ID":["5169713-949655913173837490-949655910406009122"]}}]}
+ответ
+дорога с новыми данными
+
+Очистить все введенные изменения в файлах не рута
+{"Type":"ClearAllRoutes","Account":{"Current":2,"Parents":[1]}}
+ответ
+{"Result":"Ok"} или {"Result":"Error"}
+-------------------------------------------работа с зонами---------------
+
+запрос зон
+{"Type":"GetPermittedZones","Account":{"Current":"2","Parents":["1"]}}
+ответ, список зон
+{"Zones":[{"AccountID":1,"Name":"МКАД","Type":2,"Active":1,"Color":942576,"GeoHash":"GWucfss2qd5g8cucfsg3qnzbbuucfsfwrczk6wucft46qcwj24ucft6kygn000ucft6zcp1x1gucftduw15248ucftdzpp6qnpucftgvp3ykqnucftutj9gu2yucfwn1kny0bhucfwp1ys24xjucfvcr432wjrucfvfp26w1b0ucfvsgtmxm6ducfvm4rtdvk6ucfuuvq3ykqnucfuucckkdtmucfuth5t8jr4ucfus8vkt1g8ucfu1tp2s9v2ucfsps8x7y0zucfsm85by2yhucfss2qd5g8c"},{"AccountID":1,"Name":"Центр","Type":0,"Active":1,"Color":15863420,"GeoHash":"GWucftp6c7fkqnucftp6c7fkqnucftphnvpb0bucftpnnfxcbbucftprekgbbuucftr886md9vucftr9n7qqnpucfv21634p05ucfv234msjr4ucfv28f205x1ucfv28rmfh2nucfv0zeedvk6ucfv0vmxhpp5ucfv0gex6yhrucfv0dkcxm6ducfv03mhn7w1ucfv01jjhpp5ucftpchr3n5xucftp6c7fkqn"},{"AccountID":1,"Name":"ТТК","Type":1,"Active":1,"Color":978958,"GeoHash":"GWucfszn9xxv2fucfszn9rwmq4ucftn805pb0bucftn61hpg8cucftn4gwq6wjucftnj3fe3f8ucftq0mbn581ucftq35uwcu2ucftq9656yhrucftquxbzbbuucftrs9cuhrnucftruyqd3y0ucfv2kx8z2fsucfv2ubr9j7ducfv362jxm6ducfv398wfbukucfv38r57q4xucfv1tzbk4xjucfv1ut9wvk6ucfv1fe7uhrnucfv40re1058ucfucjw3zk6wucfubuwd57d9ucfubhfe5r4eucfszgur9j7ducfszjqy99cbucfszn9xxv2f"}]}
+
+запрос типов зон
+{"Type":"GetPermittedZoneTypes","Account":{"Current":"2","Parents":["1"]}}
+ответ, список типов зон
+{"ZoneTypes":[{"AccountID":1,"ID":1,"Name":"середина города"},{"AccountID":1,"ID":0,"Name":"центр города"},{"AccountID":1,"ID":2,"Name":"город"}]}
+
+пересчет файлов зон
+{"Type":"RecalcZones"}
+ответ
+{"Result":"Ok"} или {"Result":"Error"}
+
+сохранение зон по списку
+{"Type":"SavePermittedZones","Zones":[{"Name":"\u0420\u00a6\u0420\u00b5\u0420\u0405\u0421\u201a\u0421\u0402","Color":"15863420","Active":"1","Type":"0","GeoHash":"GR3h84vhcj3h84vhcj3h85hfen3h85kg753h85t4qm3h85twe63h85y0fz3h85z1c33h85z9q13h878r6k3h878tzq3h8794623h8730xs3h8710f33h86bd373h84xyjq3h84xm0x3h84wt9c3h84vhcj"},{"Name":"\u0420\u045e\u0420\u045e\u0420\u0459","Color":"978958","Active":"1","Type":"1","GeoHash":"GR3h84k6md3h84k6kf3h84e02t3h84f3wd3h84fj223h851zgx3h85djnh3h85f9js3h85g4j73h8hk2353h8hm8x03h8hqdr13h8k207g3h8k2f3y3h87fnfv3h87fg8q3h87em953h8773gj3h875u6p3h86geu13h86s9e33h861vn23h8612d13h84p1f43h81ytcy3h84hud93h84k6md"},{"Name":"\u0420\u045a\u0420\u0459\u0420\u0452\u0420\u201d","Color":"942576","Active":"1","Type":"2","GeoHash":"GR2uxbm9rv2uxce4sd2uxf327k2uxfbdk52uxu29u12uxu9ryh2uxv3u7h2uxvcbt92uxysdbb2uxyw6cb3h8p4n9d3h8pkb3z3h8qf78n3h8quhcp3h8t78833h8euqfm3h8d5efu3h89ehmz3h88gfzc3h886u583h2qeq9f3h2ntt7c3h2p0spg2uxbm9rv"}]}
+ответ
+{"Result":"Ok"} или {"Result":"Error"}
+
+запрос степени окончания процесса сохранения зон
+{"Type":"GetZonesProgress"}
+ответ
+{"Result":"82"}
+
+-------------------------------------------работа с маршрутами---------------
+
+запрос прокладки пути по координатам (нужно еще зоны добавить)
+{"Type":"GetastarPath","Path":"SWu2gruhjdhep3u2grggj1expk"}
+
+{"Type":"GetastarPath","Path":"SWucfsfj5ehwbwucfvwgkxp8r6","Zones":6}
+
+ответ
+{"Result":"Path Error"}
+или
+{"Path":SLu2gruhjdhep3070u2gruhjbg3up070u2gruhj85sq8070u2gru5vnggqt070u2gru5uyr2k3060u2gru5utp7wq060u2gru5uth74k060u2gru5umnmhe060u2gru5um28rs060u2gru5uj88kb060u2gru5gt967y060u2gru5fk9110060u2gru5cgydt8060u2gru5cgd92z060u2gru5c6pq60060u2gru5c0xhub060u2gru59nbgzr060u2gru58u3wu8060u2gru58ejtx7060u2gru5892470060u2grggrvdc5e000u2grggq9dg8w060u2grggq9dg8w060u2grggnpb17v060u2grggjz0fjt060u2grggjt8j7h060u2grggjkebct060u2grggj4ws6f020u2grggj1expk"}
+
+
+-------------------------------------------работа с регионами и маяками---------------
+Запрос списка регионов с маяками
+{"Type":"GetAreas","Account":{"Current":"3","Parents":["2","1"]}}
+
+http://localhost:7653/?{"Type":"GetAreas","Account":{"Current":"3","Parents":["2","1"]}}
+Ответ
+{"Areas":[{"AccountID":1,"Name":"Регион1","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw","LandMarks":"PAucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw"},{"AccountID":1,"Name":"Регион2","GeoHashID":"PAv1dkyp1md52hv1dkyp8hhjbn","Polygon":"GWv1dkyp1md52hv1dkyp8hhjbnv1dmn8syn021v1dmn8jz6jb1","LandMarks":"PAv1dkyp1md52hv1dkyp8hhjbnv1dmn8syn021v1dmn8jz6jb1"}]}
+{"Areas":[{"AccountID":1,"Name":"Регион1","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw","LandMarks":"PAucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw", "Tracks":[{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":0,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."},{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":8,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."}]},{"AccountID":1,"Name":"Регион2","GeoHashID":"PAv1dkyp1md52hv1dkyp8hhjbn","Polygon":"GWv1dkyp1md52hv1dkyp8hhjbnv1dmn8syn021v1dmn8jz6jb1","LandMarks":"PAv1dkyp1md52hv1dkyp8hhjbnv1dmn8syn021v1dmn8jz6jb1","Tracks":[{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":0,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."},{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":8,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."}]}]}
+или
+{"Result":"Error"}
+
+Добавление регионов
+{"Type":"SaveAreas","Areas":[{"UpdateType":"Add","Name":"Регион3","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw","LandMarks":"PAucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw"}],"Account":{"Current":"3","Parents":["2","1"]}}
+{"Type":"SaveAreas","LandMarkMaxDist":"5","Areas":[{"UpdateType":"Add",{"ID":1,"Name":"Points 2","GeoHashID":"PAucgh29nz5urbucsph4qfs102","State":0,"Polygon":"GWucgh29nz5urbucuhk1nzhh22ucsph4qfs102ucep0dqfecpb","LandMarks":"PAucgh29nz5urbucsph4qfs102"}],"Account":{"Current":"3","Parents":["2","1"]}}
+
+изменение регионов, можно изменить имя и точки, прямоугольник менять нельзя, если меняем, то это удаление-добавление
+{"Type":"SaveAreas","Areas":[{"UpdateType":"Update","Name":"Регион1","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw","LandMarks":"PAucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw"]}],"Account":{"Current":"3","Parents":["2","1"]}}
+
+Удаление регионов
+{"Type":"SaveAreas","Areas":[{"UpdateType":"Delete","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg"}],"Account":{"Current":"3","Parents":["2","1"]}}
+
+Ответ
+{"Result":"Ok"} или {"Result":"Error"}
+
+генерация маяков
+{"Type":"GetLandMarks","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw"}
+{"Type":"GetLandMarks","Polygon":"GWucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw","LandMarkMaxDist":"5"}
+LandMarkMaxDist по-умолчанию берется из ini
+Ответ 
+{"LandMarks":"PAucfss2pkg81fucfss2dbqcbgucfss351d0pnucfss4krq0gw"}
+
+получение маршрутов для региона
+{"Type":"GetAreaTracks","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg"},"Account":{"Current":"3","Parents":["2","1"]}}
+Ответ
+{"Tracks":["GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet.....","GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet..."]}
+{"Tracks":[{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":0,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."},{"Points":"PAucfetr5wwrc8ucfetrms9qh5","Zone":8,"Way":"GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet....."}]}
+
+расчет треков для регона
+{"Type":"CalcAreaTracks","GeoHashID":"PAucfss2pkg81fucfss2dbqcbg"},"Account":{"Current":"3","Parents":["2","1"]}}
+Ответ
+{"Tracks":["GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet.....","GWucfetr5wwrc8ucfetrms9qh5ucfetrp5snbpucfet..."]}
+или
+{"Result":"Error"}
+Ответ

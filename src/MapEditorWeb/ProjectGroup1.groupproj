@@ -1,0 +1,192 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{C4DA78AF-109D-4B9E-895A-D70DA7503AB9}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="MapEditorWeb64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MapEditorTestApp64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar\AStar64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar\LandmarkPathCalc64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\GenerateEdgeFiles\GenerateNew.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\GenerateEdgeFiles\GenerateEdgeFiles.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MapEditorCon64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar\AStar64x64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MapEditorTestApp.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="MapEditorWeb.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar\MemoryTester\AstarMemoryTester.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar\MemoryTester\AstarMemoryTester50.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\Processor\TrackGeoLinkProcessor\IlsSaaSTrackGeoLinkProcessor64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\Collector\KafkaToPnt\ILSKafkaPntPublisher.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="MapEditorWeb64">
+			<MSBuild Projects="MapEditorWeb64.dproj"/>
+		</Target>
+		<Target Name="MapEditorWeb64:Clean">
+			<MSBuild Projects="MapEditorWeb64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="MapEditorWeb64:Make">
+			<MSBuild Projects="MapEditorWeb64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="MapEditorTestApp64">
+			<MSBuild Projects="MapEditorTestApp64.dproj"/>
+		</Target>
+		<Target Name="MapEditorTestApp64:Clean">
+			<MSBuild Projects="MapEditorTestApp64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="MapEditorTestApp64:Make">
+			<MSBuild Projects="MapEditorTestApp64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AStar64">
+			<MSBuild Projects="..\AStar\AStar64.dproj"/>
+		</Target>
+		<Target Name="AStar64:Clean">
+			<MSBuild Projects="..\AStar\AStar64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStar64:Make">
+			<MSBuild Projects="..\AStar\AStar64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="LandmarkPathCalc64">
+			<MSBuild Projects="..\AStar\LandmarkPathCalc64.dproj"/>
+		</Target>
+		<Target Name="LandmarkPathCalc64:Clean">
+			<MSBuild Projects="..\AStar\LandmarkPathCalc64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="LandmarkPathCalc64:Make">
+			<MSBuild Projects="..\AStar\LandmarkPathCalc64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="GenerateNew">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateNew.dproj"/>
+		</Target>
+		<Target Name="GenerateNew:Clean">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateNew.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="GenerateNew:Make">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateNew.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="GenerateEdgeFiles">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateEdgeFiles.dproj"/>
+		</Target>
+		<Target Name="GenerateEdgeFiles:Clean">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateEdgeFiles.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="GenerateEdgeFiles:Make">
+			<MSBuild Projects="..\GenerateEdgeFiles\GenerateEdgeFiles.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="MapEditorCon64">
+			<MSBuild Projects="MapEditorCon64.dproj"/>
+		</Target>
+		<Target Name="MapEditorCon64:Clean">
+			<MSBuild Projects="MapEditorCon64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="MapEditorCon64:Make">
+			<MSBuild Projects="MapEditorCon64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AStar64x64">
+			<MSBuild Projects="..\AStar\AStar64x64.dproj"/>
+		</Target>
+		<Target Name="AStar64x64:Clean">
+			<MSBuild Projects="..\AStar\AStar64x64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStar64x64:Make">
+			<MSBuild Projects="..\AStar\AStar64x64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="MapEditorTestApp">
+			<MSBuild Projects="MapEditorTestApp.dproj"/>
+		</Target>
+		<Target Name="MapEditorTestApp:Clean">
+			<MSBuild Projects="MapEditorTestApp.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="MapEditorTestApp:Make">
+			<MSBuild Projects="MapEditorTestApp.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="MapEditorWeb">
+			<MSBuild Projects="MapEditorWeb.dproj"/>
+		</Target>
+		<Target Name="MapEditorWeb:Clean">
+			<MSBuild Projects="MapEditorWeb.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="MapEditorWeb:Make">
+			<MSBuild Projects="MapEditorWeb.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AstarMemoryTester">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester.dproj"/>
+		</Target>
+		<Target Name="AstarMemoryTester:Clean">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AstarMemoryTester:Make">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AstarMemoryTester50">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester50.dproj"/>
+		</Target>
+		<Target Name="AstarMemoryTester50:Clean">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester50.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AstarMemoryTester50:Make">
+			<MSBuild Projects="..\AStar\MemoryTester\AstarMemoryTester50.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="IlsSaaSTrackGeoLinkProcessor64">
+			<MSBuild Projects="..\Processor\TrackGeoLinkProcessor\IlsSaaSTrackGeoLinkProcessor64.dproj"/>
+		</Target>
+		<Target Name="IlsSaaSTrackGeoLinkProcessor64:Clean">
+			<MSBuild Projects="..\Processor\TrackGeoLinkProcessor\IlsSaaSTrackGeoLinkProcessor64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="IlsSaaSTrackGeoLinkProcessor64:Make">
+			<MSBuild Projects="..\Processor\TrackGeoLinkProcessor\IlsSaaSTrackGeoLinkProcessor64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="ILSKafkaPntPublisher">
+			<MSBuild Projects="..\Collector\KafkaToPnt\ILSKafkaPntPublisher.dproj"/>
+		</Target>
+		<Target Name="ILSKafkaPntPublisher:Clean">
+			<MSBuild Projects="..\Collector\KafkaToPnt\ILSKafkaPntPublisher.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="ILSKafkaPntPublisher:Make">
+			<MSBuild Projects="..\Collector\KafkaToPnt\ILSKafkaPntPublisher.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="MapEditorWeb64;MapEditorTestApp64;AStar64;LandmarkPathCalc64;GenerateNew;GenerateEdgeFiles;MapEditorCon64;AStar64x64;MapEditorTestApp;MapEditorWeb;AstarMemoryTester;AstarMemoryTester50;IlsSaaSTrackGeoLinkProcessor64;ILSKafkaPntPublisher"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="MapEditorWeb64:Clean;MapEditorTestApp64:Clean;AStar64:Clean;LandmarkPathCalc64:Clean;GenerateNew:Clean;GenerateEdgeFiles:Clean;MapEditorCon64:Clean;AStar64x64:Clean;MapEditorTestApp:Clean;MapEditorWeb:Clean;AstarMemoryTester:Clean;AstarMemoryTester50:Clean;IlsSaaSTrackGeoLinkProcessor64:Clean;ILSKafkaPntPublisher:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="MapEditorWeb64:Make;MapEditorTestApp64:Make;AStar64:Make;LandmarkPathCalc64:Make;GenerateNew:Make;GenerateEdgeFiles:Make;MapEditorCon64:Make;AStar64x64:Make;MapEditorTestApp:Make;MapEditorWeb:Make;AstarMemoryTester:Make;AstarMemoryTester50:Make;IlsSaaSTrackGeoLinkProcessor64:Make;ILSKafkaPntPublisher:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

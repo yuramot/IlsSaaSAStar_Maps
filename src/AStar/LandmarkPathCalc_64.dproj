@@ -1,0 +1,187 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{E3271773-D5B6-42F0-B66E-ED557E88C451}</ProjectGuid>
+			<ProjectVersion>13.4</ProjectVersion>
+			<FrameworkType>None</FrameworkType>
+			<MainSource>LandmarkPathCalc_64.dpr</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform Condition="'$(Platform)'==''">Win64</Platform>
+			<TargetedPlatforms>3</TargetedPlatforms>
+			<AppType>Console</AppType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+			<Base_Win64>true</Base_Win64>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+			<Base_Win32>true</Base_Win32>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+			<Cfg_1_Win64>true</Cfg_1_Win64>
+			<CfgParent>Cfg_1</CfgParent>
+			<Cfg_1>true</Cfg_1>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+			<Cfg_1_Win32>true</Cfg_1_Win32>
+			<CfgParent>Cfg_1</CfgParent>
+			<Cfg_1>true</Cfg_1>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<Manifest_File>None</Manifest_File>
+			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+			<VerInfo_Locale>1049</VerInfo_Locale>
+			<DCC_UnitSearchPath>..\..\lib\Synapse;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+			<DCC_UsePackage>AnyDAC_PhysADS_D16;AnyDAC_Comp_D16;fmx;AnyDAC_PhysPg_D16;IndySystem;AnyDAC_Phys_D16;AnyDAC_PhysDb2_D16;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DataSnapServer;DataSnapProviderClient;AnyDAC_PhysMSSQL_D16;DbxCommonDriver;dbxcds;AnyDAC_PhysTDBX_D16;DBXOracleDriver;CustomIPTransport;AnyDAC_PhysOracle_D16;dsnap;AnyDAC_PhysSQLITE_D16;IndyCore;fmxase;AnyDAC_PhysMySQL_D16;inetdbxpress;AnyDAC_PhysODBC_D16;IPIndyImpl;bindcompfmx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;AnyDAC_PhysASA_D16;xmlrtl;IndyProtocols;DBXMySQLDriver;bindengine;DBXInformixDriver;AnyDAC_ComI_D16;DBXFirebirdDriver;inet;fmxobj;AnyDAC_PhysIB_D16;AnyDAC_PhysMSAcc_D16;DBXSybaseASADriver;fmxdae;AnyDAC_GUIxForms_D16;dbexpress;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+			<DCC_DcuOutput>..\..\obj\$(Platform)\$(Config)</DCC_DcuOutput>
+			<DCC_ExeOutput>..\..\bin\$(Platform)\$(Config)\igf</DCC_ExeOutput>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base_Win64)'!=''">
+			<Debugger_RunParams>1 -t:1 -timeout:30</Debugger_RunParams>
+			<DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+			<DCC_UsePackage>dxdborRS16;cxLibraryRS16;dxLayoutControlRS16;dxPScxVGridLnkRS16;dxPScxPivotGridLnkRS16;dxCoreRS16;cxExportRS16;dxBarRS16;dxSkinsdxNavBarPainterRS16;cxSpreadSheetRS16;cxTreeListdxBarPopupMenuRS16;dxPsPrVwAdvRS16;dxPSCoreRS16;cxPivotGridOLAPRS16;dxPScxGridLnkRS16;dxPScxTLLnkRS16;cxPageControlRS16;dxRibbonRS16;DBXSybaseASEDriver;vclimg;cxTreeListRS16;dxComnRS16;vcldb;dxSkinsdxRibbonPainterRS16;vcldsnap;dxBarExtDBItemsRS16;DBXDb2Driver;dxSkinscxSchedulerPainterRS16;vcl;DBXMSSQLDriver;cxDataRS16;cxBarEditItemRS16;dxDockingRS16;cxPageControldxBarPopupMenuRS16;dxPSLnksRS16;dxBarExtItemsRS16;dxSkinsdxDLPainterRS16;adortl;dxPSdxLCLnkRS16;cxVerticalGridRS16;dxorgcRS16;dxPScxExtCommonRS16;dxNavBarRS16;dxPSdxDBOCLnkRS16;dxSkinsdxBarPainterRS16;DBXOdbcDriver;dxdbtrRS16;dxSkinsCoreRS16;dxPScxSSLnkRS16;dxPScxCommonRS16;dxmdsRS16;dxPSPrVwRibbonRS16;cxGridRS16;dxSkinscxPCPainterRS16;cxEditorsRS16;vclactnband;cxPivotGridRS16;dxPScxSchedulerLnkRS16;dxPSdxDBTVLnkRS16;bindcompvcl;vclie;cxSchedulerRS16;vcltouch;VclSmp;dxTabbedMDIRS16;DataSnapConnectors;dxPSdxOCLnkRS16;dsnapcon;dxPSdxFCLnkRS16;dxThemeRS16;dcldxSkinsCoreRS16;dxPScxPCProdRS16;vclx;dxFlowChartRS16;dxGDIPlusRS16;dxBarDBNavRS16;$(DCC_UsePackage)</DCC_UsePackage>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base_Win32)'!=''">
+			<DCC_UsePackage>fsADO16;dxdborRS16;sdac160;cxLibraryRS16;dxLayoutControlRS16;dxPScxVGridLnkRS16;dxPScxPivotGridLnkRS16;dxCoreRS16;cxExportRS16;dxBarRS16;dxSkinsdxNavBarPainterRS16;cxSpreadSheetRS16;cxTreeListdxBarPopupMenuRS16;dxPsPrVwAdvRS16;inetdbbde;dxPSCoreRS16;cxPivotGridOLAPRS16;dxPScxGridLnkRS16;dxPScxTLLnkRS16;frxBDE16;cxPageControlRS16;dxRibbonRS16;DBXSybaseASEDriver;vclimg;cxTreeListRS16;dxComnRS16;vcldb;dxSkinsdxRibbonPainterRS16;vcldsnap;dac160;dxBarExtDBItemsRS16;DBXDb2Driver;DCEF_XE2;frxADO16;frxe16;dxSkinscxSchedulerPainterRS16;vcl;CloudService;DBXMSSQLDriver;CodeSiteExpressPkg;cxDataRS16;cxBarEditItemRS16;dxDockingRS16;cxPageControldxBarPopupMenuRS16;cxSchedulerGridRS16;dxPSLnksRS16;sdacvcl160;dxBarExtItemsRS16;dxtrmdRS16;dxSkinsdxDLPainterRS16;GR32_DSGN_RSXE2;GR32_RSXE2;adortl;dxPSdxLCLnkRS16;cxVerticalGridRS16;madBasic_;dxorgcRS16;frxDBX16;dxPScxExtCommonRS16;vcldbx;dxNavBarRS16;frx16;dxPSdxDBOCLnkRS16;dxSkinsdxBarPainterRS16;crcontrols160;DBXOdbcDriver;dxdbtrRS16;madDisAsm_;dxSkinsCoreRS16;svnui;dxPScxSSLnkRS16;cxPivotGridChartRS16;dxPScxCommonRS16;dxmdsRS16;dxSpellCheckerRS16;dxPSPrVwRibbonRS16;cxGridRS16;dxSkinscxPCPainterRS16;mypak;cxEditorsRS16;vclactnband;cxPivotGridRS16;dxPScxSchedulerLnkRS16;dxPSdxDBTVLnkRS16;fs16;bindcompvcl;fsBDE16;frxDB16;vclie;cxSchedulerRS16;madExcept_;vcltouch;dacvcl160;VclSmp;dxTabbedMDIRS16;fsDB16;DataSnapConnectors;dxPSdxOCLnkRS16;dsnapcon;dxPSdxFCLnkRS16;dxThemeRS16;dcldxSkinsCoreRS16;dxPScxPCProdRS16;vclx;svn;dxFlowChartRS16;bdertl;dxGDIPlusRS16;dxBarDBNavRS16;$(DCC_UsePackage)</DCC_UsePackage>
+			<DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<DCC_RemoteDebug>true</DCC_RemoteDebug>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+			<Debugger_RunParams>4 -g:83 -t:1 -timeout:30 -calc:all</Debugger_RunParams>
+			<DCC_ExeOutput>..\..\bin\win64\$(Config)</DCC_ExeOutput>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+			<DCC_MaxStackSize>262144</DCC_MaxStackSize>
+			<Debugger_RunParams>83 -t:1 -timeout:30 -calc:all</Debugger_RunParams>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+			<DCC_RemoteDebug>false</DCC_RemoteDebug>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="$(MainSource)">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="ULPCCore.pas"/>
+			<DCCReference Include="LandmarkPathCalculator.pas"/>
+			<DCCReference Include="..\_Common\Geo.Pos.pas"/>
+			<DCCReference Include="..\_Common\Geo.Hash.pas"/>
+			<DCCReference Include="..\_Common\Geo.Calcs.pas"/>
+			<DCCReference Include="..\_Common\Ils.Utils.pas"/>
+			<DCCReference Include="..\_Common\UStructArray.pas"/>
+			<DCCReference Include="AStar64.LandMark.pas"/>
+			<DCCReference Include="..\_Common\AStar64.FileStructs.pas"/>
+			<DCCReference Include="..\_Common\AStar64.Areas.pas"/>
+			<DCCReference Include="..\_Common\AStar64.Files.pas"/>
+			<DCCReference Include="VisualTester\AStar64.DynImport.pas"/>
+			<DCCReference Include="ULPCThread.pas"/>
+			<DCCReference Include="..\_Common\Ils.Logger.pas"/>
+			<DCCReference Include="..\_Common\Geo.Hash.Search.pas"/>
+			<DCCReference Include="..\_Common\Ils.Json.Names.pas"/>
+			<DCCReference Include="..\_Common\Ils.Json.Utils.pas"/>
+			<DCCReference Include="..\..\lib\Json\JsonDataObjects.pas"/>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Delphi.Personality>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Source>
+						<Source Name="MainSource">LandmarkPathCalc_64.dpr</Source>
+					</Source>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k160.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclofficexp160.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcbie160.bpl">File c:\program files (x86)\embarcadero\rad studio\9.0\bin\bcbie160.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclbcbsmp160.bpl">File c:\program files (x86)\embarcadero\rad studio\9.0\bin\dclbcbsmp160.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\LibD16\dclfs16.bpl">File C:\Program Files (x86)\FastReports\LibD16\dclfs16.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\LibD16\dclfrx16.bpl">File C:\Program Files (x86)\FastReports\LibD16\dclfrx16.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\LibD16\dclfsDB16.bpl">File C:\Program Files (x86)\FastReports\LibD16\dclfsDB16.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\LibD16\dclfrxDB16.bpl">File C:\Program Files (x86)\FastReports\LibD16\dclfrxDB16.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\LibD16\dclfrxe16.bpl">File C:\Program Files (x86)\FastReports\LibD16\dclfrxe16.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcboffice2k160.bpl">File c:\program files (x86)\embarcadero\rad studio\9.0\bin\bcboffice2k160.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcbofficexp160.bpl">File c:\program files (x86)\embarcadero\rad studio\9.0\bin\bcbofficexp160.bpl not found</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<Deployment/>
+				<Platforms>
+					<Platform value="Win64">True</Platform>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+	</Project>

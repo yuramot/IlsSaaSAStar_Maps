@@ -1,0 +1,108 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{6697B817-2E73-4579-AF2A-AD56A4667E15}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="AStar64.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Test\AStar64Tests.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="AStarTester.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="VisualTester\AstarVisualTesterDL.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\AStar_ZC\ZC2.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="VisualTester\AstarLandMarkGenerator.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="AStar64x64.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="AStar64">
+			<MSBuild Projects="AStar64.dproj"/>
+		</Target>
+		<Target Name="AStar64:Clean">
+			<MSBuild Projects="AStar64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStar64:Make">
+			<MSBuild Projects="AStar64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AStar64Tests">
+			<MSBuild Projects="Test\AStar64Tests.dproj"/>
+		</Target>
+		<Target Name="AStar64Tests:Clean">
+			<MSBuild Projects="Test\AStar64Tests.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStar64Tests:Make">
+			<MSBuild Projects="Test\AStar64Tests.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AStarTester">
+			<MSBuild Projects="AStarTester.dproj"/>
+		</Target>
+		<Target Name="AStarTester:Clean">
+			<MSBuild Projects="AStarTester.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStarTester:Make">
+			<MSBuild Projects="AStarTester.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AstarVisualTesterDL">
+			<MSBuild Projects="VisualTester\AstarVisualTesterDL.dproj"/>
+		</Target>
+		<Target Name="AstarVisualTesterDL:Clean">
+			<MSBuild Projects="VisualTester\AstarVisualTesterDL.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AstarVisualTesterDL:Make">
+			<MSBuild Projects="VisualTester\AstarVisualTesterDL.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="ZC2">
+			<MSBuild Projects="..\AStar_ZC\ZC2.dproj"/>
+		</Target>
+		<Target Name="ZC2:Clean">
+			<MSBuild Projects="..\AStar_ZC\ZC2.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="ZC2:Make">
+			<MSBuild Projects="..\AStar_ZC\ZC2.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AstarLandMarkGenerator">
+			<MSBuild Projects="VisualTester\AstarLandMarkGenerator.dproj"/>
+		</Target>
+		<Target Name="AstarLandMarkGenerator:Clean">
+			<MSBuild Projects="VisualTester\AstarLandMarkGenerator.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AstarLandMarkGenerator:Make">
+			<MSBuild Projects="VisualTester\AstarLandMarkGenerator.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="AStar64x64">
+			<MSBuild Projects="AStar64x64.dproj"/>
+		</Target>
+		<Target Name="AStar64x64:Clean">
+			<MSBuild Projects="AStar64x64.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="AStar64x64:Make">
+			<MSBuild Projects="AStar64x64.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="AStar64;AStar64Tests;AStarTester;AstarVisualTesterDL;ZC2;AstarLandMarkGenerator;AStar64x64"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="AStar64:Clean;AStar64Tests:Clean;AStarTester:Clean;AstarVisualTesterDL:Clean;ZC2:Clean;AstarLandMarkGenerator:Clean;AStar64x64:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="AStar64:Make;AStar64Tests:Make;AStarTester:Make;AstarVisualTesterDL:Make;ZC2:Make;AstarLandMarkGenerator:Make;AStar64x64:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

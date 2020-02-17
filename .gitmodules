@@ -1,0 +1,3 @@
+[submodule "IlsSaaSCommon"]
+	path = IlsSaaSCommon
+	url = ../IlsSaaSCommon
