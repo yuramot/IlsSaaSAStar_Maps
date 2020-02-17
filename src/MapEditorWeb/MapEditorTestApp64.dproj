@@ -47,13 +47,13 @@
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
 			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-			<DCC_UnitSearchPath>..\..\lib\FastMM4;..\_Common;..\AStar;..\..\lib\json;..\_Legacy\_include\Synapse;..\..\lib\delphiredisclient.2x\sources;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_UnitSearchPath>..\IlsSaaSCommon\lib\FastMM4;..\..\IlsSaaSCommon\_Common;..\AStar;..\..\IlsSaaSCommon\lib\json;..\..\IlsSaaSCommon\_Legacy\_include\Synapse;..\..\IlsSaaSCommon\lib\delphiredisclient.1x\sources;..\..\IlsSaaSCommon\lib\FastMM4;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
 			<Manifest_File>None</Manifest_File>
 			<VerInfo_Locale>1049</VerInfo_Locale>
 			<DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
 			<Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
 			<DCC_UsePackage>AnyDAC_PhysADS_D16;AnyDAC_Comp_D16;fmx;AnyDAC_PhysPg_D16;IndySystem;AnyDAC_Phys_D16;AnyDAC_PhysDb2_D16;DBXInterBaseDriver;DataSnapCommon;DataSnapClient;DataSnapServer;DataSnapProviderClient;DbxCommonDriver;AnyDAC_PhysMSSQL_D16;dbxcds;AnyDAC_PhysTDBX_D16;DBXOracleDriver;CustomIPTransport;AnyDAC_PhysOracle_D16;dsnap;AnyDAC_PhysSQLITE_D16;fmxase;IndyCore;AnyDAC_PhysMySQL_D16;inetdbxpress;AnyDAC_PhysODBC_D16;IPIndyImpl;bindcompfmx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;AnyDAC_PhysASA_D16;xmlrtl;ibxpress;IndyProtocols;DBXMySQLDriver;bindengine;soaprtl;DBXInformixDriver;AnyDAC_ComI_D16;DBXFirebirdDriver;inet;fmxobj;AnyDAC_PhysIB_D16;AnyDAC_PhysMSAcc_D16;DBXSybaseASADriver;fmxdae;AnyDAC_GUIxForms_D16;dbexpress;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
-			<DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
+			<DCC_DcuOutput>..\obj\$(Platform)\$(Config)</DCC_DcuOutput>
 			<DCC_ExeOutput>..\..\bin\$(Platform)\$(Config)\igf</DCC_ExeOutput>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base_Win64)'!=''">
@@ -116,7 +116,7 @@
 			<DCCReference Include="uSpeed.pas"/>
 			<DCCReference Include="uLandMark.pas"/>
 			<DCCReference Include="clMMTimer.pas"/>
-			<DCCReference Include="..\_Common\AStar64.Files.pas"/>
+			<DCCReference Include="..\..\IlsSaaSCommon\_Common\AStar64.Files.pas"/>
 			<DCCReference Include="..\AStar\LandmarkPathCalculator.pas"/>
 			<DCCReference Include="..\AStar\AStar64.DynImport.pas"/>
 			<DCCReference Include="..\AStar\AStar64.LandMark.pas"/>

@@ -16,7 +16,7 @@ uses
   uSpeed in 'uSpeed.pas',
   uLandMark in 'uLandMark.pas',
   clMMTimer in 'clMMTimer.pas',
-  AStar64.Files in '..\_Common\AStar64.Files.pas',
+  AStar64.Files in '..\..\IlsSaaSCommon\_Common\AStar64.Files.pas',
   LandmarkPathCalculator in '..\AStar\LandmarkPathCalculator.pas',
   AStar64.DynImport in '..\AStar\AStar64.DynImport.pas',
   AStar64.LandMark in '..\AStar\AStar64.LandMark.pas';
