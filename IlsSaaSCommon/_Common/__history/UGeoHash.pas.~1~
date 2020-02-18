@@ -1,0 +1,504 @@
+﻿unit UGeoHash;
+//------------------------------------------------------------------------------
+// реализация гео-хэширования
+//------------------------------------------------------------------------------
+//  набор фунций для гео-кодирования и декодирования
+//
+//  подробное описания функций - перед ними
+//
+//  ВАЖНО: все функции используют только общемировые ([-90;90],[-180;180]) координаты
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+interface
+
+uses
+  SysUtils,
+  Geo.Pos,
+  Math;
+
+//------------------------------------------------------------------------------
+type
+
+  TGeoHashStringFormat = (gfPath, gfSpeed);
+
+  TGeoPathPoint = record
+    p: TGeoPos;
+    s: Integer;
+  end;
+
+  TGeoPathPointArray = TArray<TGeoPathPoint>;
+//------------------------------------------------------------------------------
+//! статический класс-инкапсулятор
+//------------------------------------------------------------------------------
+  TGeoHash = class
+  public
+//------------------------------------------------------------------------------
+//! функция кодирования точки в бинарный гео-хэш
+//------------------------------------------------------------------------------
+    class function EncodePointBin(
+      const ALat: Double;
+      const ALong: Double
+    ): Int64;
+//------------------------------------------------------------------------------
+//! функция кодирования точки в строковый гео-хэш
+//!   APrec - кол-во символов
+//!   !!! APrec ДОЛЖНО БЫТЬ в интервале 1-12, ПРОВЕРКИ НЕТ !!!
+//------------------------------------------------------------------------------
+    class function EncodePointString(
+      const ALat: Double;
+      const ALong: Double;
+      const APrec: Integer
+    ): string;
+//------------------------------------------------------------------------------
+//! функция конвертации бинарного гео-хэша в строковый
+//!   APrec - кол-во символов
+//!   !!! APrec ДОЛЖНО БЫТЬ в интервале 1-12, ПРОВЕРКИ НЕТ !!!
+//------------------------------------------------------------------------------
+    class function ConvertBinToString(
+      const AHash: Int64;
+      const APrec: Integer
+    ): string;
+//------------------------------------------------------------------------------
+//! процедура декодирования бинарного гео-хэша в точку
+//------------------------------------------------------------------------------
+    class procedure DecodePointBin(
+      const AHash: Int64;
+      var RLat: Double;
+      var RLong: Double
+    );
+//------------------------------------------------------------------------------
+//! функция декодирования строкового гео-хэша в точку
+//!   !!! кол-во символов в строке ДОЛЖНО БЫТЬ в интервале 1-12, ПРОВЕРКИ НЕТ !!!
+//!   return: true - если декодирование успешно; false - если нет
+//------------------------------------------------------------------------------
+    class function DecodePointString(
+      const AHash: string;
+      var RLat: Double;
+      var RLong: Double
+    ): Boolean;
+//------------------------------------------------------------------------------
+//! функция кодирования массива точек в строку гео-хэша
+//!   !!! строка будет содержать префикс GW + один хэш = 12 символов !!!
+//------------------------------------------------------------------------------
+    class function EncodeArrayWorld(
+      const ACoords: TGeoPosArray
+    ): string;
+//------------------------------------------------------------------------------
+//! функция кодирования массива точек в строку гео-хэша
+//!   префикса нет
+//------------------------------------------------------------------------------
+    class function EncodeArrayAny(
+      const ACoords: TGeoPosArray;
+      const APrec: Integer
+    ): string;
+//------------------------------------------------------------------------------
+//! функция кодирования массива точек в строку гео-хэша
+//!   префикс и формат зависят от параметра AFormat
+//------------------------------------------------------------------------------
+    class function EncodeArrayAnyFormat(
+      const ACoords: TGeoPathPointArray;
+      const APrec: Integer;
+      const AFormat: TGeoHashStringFormat
+    ): string;
+//------------------------------------------------------------------------------
+//! функция декодирования строки гео-хэша в массив точек
+//!   !!! строка должна содержать префикс GW + один хэш = 12 символов !!!
+//!   return: true - если декодирование успешно; false - если нет
+//------------------------------------------------------------------------------
+    class function DecodeArrayWorld(
+      const AHash: string;
+      var RCoords: TGeoPosArray
+    ): Boolean;
+//------------------------------------------------------------------------------
+//! функция декодирования строки гео-хэша в массив точек
+//!   префикса нет
+//!   return: true - если декодирование успешно; false - если нет
+//------------------------------------------------------------------------------
+    class function DecodeArrayAny(
+      const AHash: string;
+      const APrec: Integer;
+      var RCoords: TGeoPosArray
+    ): Boolean;
+  end;
+
+//------------------------------------------------------------------------------
+implementation
+
+const
+
+//------------------------------------------------------------------------------
+//! массив конвертации букв в номера
+//------------------------------------------------------------------------------
+  CHashFromLetters: array[48..122] of Integer = (
+     0,  1,  2,  3,  4,  5,  6,  7, // 30-37, '0'..'7'
+     8,  9, -1, -1, -1, -1, -1, -1, // 38-3F, '8','9'
+    -1, -1, 10, 11, 12, 13, 14, 15, // 40-47, 'B'..'G'
+    16, -1, 17, 18, -1, 19, 20, -1, // 48-4F, 'H','J','K','M','N'
+    21, 22, 23, 24, 25, 26, 27, 28, // 50-57, 'P'..'W'
+    29, 30, 31, -1, -1, -1, -1, -1, // 58-5F, 'X'..'Z'
+    -1, -1, 10, 11, 12, 13, 14, 15, // 60-67, 'b'..'g'
+    16, -1, 17, 18, -1, 19, 20, -1, // 68-6F, 'h','j','k','m','n'
+    21, 22, 23, 24, 25, 26, 27, 28, // 70-77, 'p'..'w'
+    29, 30, 31                      // 78-7A, 'x'..'z'
+  );
+
+//------------------------------------------------------------------------------
+//! массив конвертации номеров в буквы
+//------------------------------------------------------------------------------
+  CHashToLetters: array[0..31] of Char = (
+    '0', '1', '2', '3', '4', '5', '6', '7',
+    '8', '9', 'b', 'c', 'd', 'e', 'f', 'g',
+    'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r',
+    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+  );
+
+//------------------------------------------------------------------------------
+//! конвертируем букву в номер
+//------------------------------------------------------------------------------
+function Letter2Num(
+  const ALetter: Char
+): Integer;
+begin
+  if (Ord(ALetter) < Low(CHashFromLetters)) or (Ord(ALetter) > High(CHashFromLetters)) then
+    Result := -1
+  else
+    Result := CHashFromLetters[Ord(ALetter)];
+end;
+
+//------------------------------------------------------------------------------
+//! TGeoHash
+//------------------------------------------------------------------------------
+
+class function TGeoHash.EncodePointBin(
+  const ALat: Double;
+  const ALong: Double
+): Int64;
+var
+  //!
+  WorkBoundMin, WorkBoundMax: TGeoPos;
+  //!
+  LatiMid, LongiMid: Double;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  WorkBoundMin.Latitude := -90;
+  WorkBoundMin.Longitude := -180;
+  WorkBoundMax.Latitude := 90;
+  WorkBoundMax.Longitude := 180;
+  Result := 0;
+  for I := 59 downto 0 do
+  begin
+    Result := Result shl 1;
+    if Odd(I) then
+    begin
+      LongiMid := (WorkBoundMin.Longitude + WorkBoundMax.Longitude) * 0.5;
+      if (ALong >= LongiMid) then
+      begin
+        Inc(Result);
+        WorkBoundMin.Longitude := LongiMid;
+      end
+      else
+        WorkBoundMax.Longitude := LongiMid;
+    end
+    else
+    begin
+      LatiMid := (WorkBoundMin.Latitude + WorkBoundMax.Latitude) * 0.5;
+      if (ALat >= LatiMid) then
+      begin
+        Inc(Result);
+        WorkBoundMin.Latitude := LatiMid;
+      end
+      else
+        WorkBoundMax.Latitude := LatiMid;
+    end;
+  end;
+end;
+
+class function TGeoHash.EncodePointString(
+  const ALat: Double;
+  const ALong: Double;
+  const APrec: Integer
+): string;
+begin
+  Result := ConvertBinToString(EncodePointBin(ALat, ALong), APrec);
+end;
+
+class function TGeoHash.ConvertBinToString(
+  const AHash: Int64;
+  const APrec: Integer
+): string;
+var
+  //!
+  Temp64: Int64;
+  //!
+  I: Integer;
+  //!
+  Rez: array[0..12] of Char;
+//------------------------------------------------------------------------------
+begin
+  FillChar(Rez, SizeOf(Rez), 0);
+  Temp64 := AHash shr ((12 - APrec) * 5);
+  for I := APrec - 1 downto 0 do
+  begin
+    Rez[I] := CHashToLetters[Temp64 and $1f];
+    Temp64 := Temp64 shr 5;
+  end;
+  Result := string(Rez);
+end;
+
+class procedure TGeoHash.DecodePointBin(
+  const AHash: Int64;
+  var RLat: Double;
+  var RLong: Double
+);
+var
+  //!
+  WorkHash: Int64;
+  //!
+  WorkBoundMin, WorkBoundMax: TGeoPos;
+  //!
+  LatiMid, LongiMid: Double;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  WorkHash := AHash shl 4;
+  WorkBoundMin.Latitude := -90;
+  WorkBoundMin.Longitude := -180;
+  WorkBoundMax.Latitude := 90;
+  WorkBoundMax.Longitude := 180;
+  for I := 59 downto 0 do
+  begin
+    if Odd(I) then
+    begin
+      LongiMid := (WorkBoundMin.Longitude + WorkBoundMax.Longitude) * 0.5;
+      if (WorkHash < 0) then
+        WorkBoundMin.Longitude := LongiMid
+      else
+        WorkBoundMax.Longitude := LongiMid;
+    end
+    else
+    begin
+      LatiMid := (WorkBoundMin.Latitude + WorkBoundMax.Latitude) * 0.5;
+      if (WorkHash < 0) then
+        WorkBoundMin.Latitude := LatiMid
+      else
+        WorkBoundMax.Latitude := LatiMid;
+    end;
+    WorkHash := WorkHash shl 1;
+  end;
+  RLat := (WorkBoundMin.Latitude + WorkBoundMax.Latitude) * 0.5;
+  RLong := (WorkBoundMin.Longitude + WorkBoundMax.Longitude) * 0.5;
+end;
+
+class function TGeoHash.DecodePointString(
+  const AHash: string;
+  var RLat: Double;
+  var RLong: Double
+): Boolean;
+var
+  //!
+  WorkBoundMin, WorkBoundMax: TGeoPos;
+  //!
+  LatiMid, LongiMid: Double;
+  //!
+  BinHash: Integer;
+  //!
+  BitPos: Integer;
+  //!
+  EvenBit: Boolean;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  Result := False;
+  WorkBoundMin.Latitude := -90;
+  WorkBoundMin.Longitude := -180;
+  WorkBoundMax.Latitude := 90;
+  WorkBoundMax.Longitude := 180;
+  EvenBit := False;
+  for I := 1 to Length(AHash) do
+  begin
+    BinHash := Letter2Num(AHash[I]);
+    if (BinHash = -1) then Exit;
+    for BitPos := 4 downto 0 do
+    begin
+      EvenBit := not EvenBit;
+      if EvenBit then
+      begin
+        LongiMid := (WorkBoundMin.Longitude + WorkBoundMax.Longitude) * 0.5;
+        if Odd(BinHash shr BitPos) then
+          WorkBoundMin.Longitude := LongiMid
+        else
+          WorkBoundMax.Longitude := LongiMid;
+      end
+      else
+      begin
+        LatiMid := (WorkBoundMin.Latitude + WorkBoundMax.Latitude) * 0.5;
+        if Odd(BinHash shr BitPos) then
+          WorkBoundMin.Latitude := LatiMid
+        else
+          WorkBoundMax.Latitude := LatiMid;
+      end;
+    end;
+  end;
+  RLat := (WorkBoundMin.Latitude + WorkBoundMax.Latitude) * 0.5;
+  RLong := (WorkBoundMin.Longitude + WorkBoundMax.Longitude) * 0.5;
+  Result := True;
+end;
+
+class function TGeoHash.EncodeArrayWorld(
+  const ACoords: TGeoPosArray
+): string;
+var
+  //!
+  TempStr: string;
+  //!
+  MoveFrom, MoveTo: Pointer;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  Result := 'GW';
+  SetLength(Result, Length(ACoords) * 12 + 2);
+  for I := Low(ACoords) to High(ACoords) do
+  begin
+    TempStr := EncodePointString(ACoords[I].Latitude, ACoords[I].Longitude, 12);
+    MoveFrom := @(TempStr[1]);
+    MoveTo := @(Result[I * 12 + 3]);
+    Move(MoveFrom^, MoveTo^, 12 * SizeOf(Char));
+  end;
+end;
+
+class function TGeoHash.EncodeArrayAny(
+  const ACoords: TGeoPosArray;
+  const APrec: Integer
+): string;
+var
+  //!
+  TempStr: string;
+  //!
+  MoveFrom, MoveTo: Pointer;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  SetLength(Result, Length(ACoords) * APrec);
+  for I := Low(ACoords) to High(ACoords) do
+  begin
+    TempStr := EncodePointString(ACoords[I].Latitude, ACoords[I].Longitude, APrec);
+    MoveFrom := @(TempStr[1]);
+    MoveTo := @(Result[I * APrec + 1]);
+    Move(MoveFrom^, MoveTo^, APrec * SizeOf(Char));
+  end;
+end;
+
+class function TGeoHash.EncodeArrayAnyFormat(const ACoords: TGeoPathPointArray;
+  const APrec: Integer; const AFormat: TGeoHashStringFormat): string;
+var
+  //!
+  TempStr: string;
+  //!
+  MoveFrom, MoveTo: Pointer;
+  //!
+  I: Integer;
+  //!
+  PrefixLen: Integer;
+  PointLen: Integer;
+
+  SpeedLen: Integer;
+  SpeedStr: string;
+//------------------------------------------------------------------------------
+begin
+  case AFormat of
+    gfSpeed: begin
+      Result := 'SL';
+      SpeedLen := 3;
+      PointLen := APrec + SpeedLen;
+    end;
+    else begin
+      Result := 'GW';
+      PointLen := APrec;
+    end;
+  end;
+
+  PrefixLen := Length(Result);
+  SetLength(Result, Length(ACoords) * PointLen + PrefixLen);
+  for I := Low(ACoords) to High(ACoords) do
+  begin
+    case AFormat of
+      gfSpeed:
+        if I > Low(ACoords) then
+          SpeedStr := Format('%.3d', [ACoords[I].s])
+        else
+          SpeedStr := '';
+      else
+        SpeedStr := '';
+    end;
+    TempStr := SpeedStr + EncodePointString(ACoords[I].p.Latitude, ACoords[I].p.Longitude, APrec);
+    MoveFrom := @(TempStr[1]);
+    MoveTo := @(Result[IfThen(I=0, 0, (I-1)*PointLen+APrec) + PrefixLen + 1]);
+//    MoveTo := @(Result[I * PointLen + PrefixLen + 1]);
+    Move(MoveFrom^, MoveTo^, IfThen(I=0, APrec, PointLen) * SizeOf(Char));
+  end;
+end;
+
+class function TGeoHash.DecodeArrayWorld(
+  const AHash: string;
+  var RCoords: TGeoPosArray
+): Boolean;
+var
+  //!
+  WorkStr: string;
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  SetLength(RCoords, 0);
+  if (Length(AHash) = 2) then Exit(True);
+  Result := False;
+  if (Length(AHash) < 2) then Exit;
+  if (((Length(AHash) - 2) mod 12) <> 0) then Exit;
+  WorkStr := Copy(AHash, 3, MaxInt);
+  SetLength(RCoords, (Length(WorkStr) div 12));
+  for I := Low(RCoords) to High(RCoords) do
+  begin
+    if not DecodePointString(
+      Copy(WorkStr, I * 12 + 1, 12),
+      RCoords[I].Latitude,
+      RCoords[I].Longitude
+    ) then Exit;
+  end;
+  Result := True;
+end;
+
+class function TGeoHash.DecodeArrayAny(
+  const AHash: string;
+  const APrec: Integer;
+  var RCoords: TGeoPosArray
+): Boolean;
+var
+  //!
+  I: Integer;
+//------------------------------------------------------------------------------
+begin
+  SetLength(RCoords, 0);
+  Result := False;
+  if ((APrec < 1) or (APrec > 12)) then Exit;
+  if ((Length(AHash) mod APrec) <> 0) then Exit;
+  SetLength(RCoords, (Length(AHash) div APrec));
+  for I := Low(RCoords) to High(RCoords) do
+  begin
+    if not DecodePointString(
+      Copy(AHash, (I + 1) * APrec, APrec),
+      RCoords[I].Latitude,
+      RCoords[I].Longitude
+    ) then Exit;
+  end;
+  Result := True;
+end;
+
+end.
+
