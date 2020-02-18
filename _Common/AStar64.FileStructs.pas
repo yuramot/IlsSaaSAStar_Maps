@@ -1,0 +1,314 @@
+﻿unit AStar64.FileStructs;
+//------------------------------------------------------------------------------
+// все файловые структуры собраны тут
+//
+// !!! ВАЖНО !!!
+//  размер абсолютно всех файловых структур должен быть кратен 8 байт
+//  добавляйте пустое поле в конце при необходимости
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+interface
+
+uses
+  SysUtils, DateUtils, Math,
+  System.Generics.Collections,
+  AStar64.Typ, Geo.Pos, Geo.Calcs, Geo.Hash, Geo.Hash.Search;
+
+const
+  CAstarFileStructsVersionMajor     = 1;
+  CAstarFileStructsVersionMinor     = 1;
+  CAstarFileStructsVersionRevision  = 0;
+
+  CFeature1Bit = 1;
+  CFeature1Mask = 1 shl (CFeature1Bit - 1);
+
+//------------------------------------------------------------------------------
+type
+
+//------------------------------------------------------------------------------
+//! структура гео-хэш вектор
+//!   по сути - вектор из From в To, только выраженный через гео-хэши
+//------------------------------------------------------------------------------
+  PHashVector = ^THashVector;
+
+  THashVector = packed record
+    //! откуда
+    HashFrom: Int64; // 8
+    //! куда
+    HashTo: Int64;   // 16
+    function Reverse: THashVector;
+
+    class operator Equal(a, b: THashVector): Boolean;
+    class operator NotEqual(a, b: THashVector): Boolean;
+
+    function PointFrom: TGeoPos;
+    function PointTo: TGeoPos;
+    function Azimuth: Double;
+    function AzimuthFits(const aAzimuth, aTolerance: Double): Boolean;
+    function AzimuthDiff(const aAzimuth: Double): Double;
+//    function Distance(const AV: THashVector): Double;
+    function FitBBox(const AV: THashVector): Boolean;
+    function HashStr: string;
+    function TruncateToByte: Byte;
+    constructor Create(const ASP: TGeoPos; const ATP: TGeoPos);
+    function ToComplexString: string;
+  end;
+
+  THashVectorArray = TArray<THashVector>;
+
+//  ThashVectorDictionary = class(TDictionary<Int64, THashVectorArray>)
+//    procedure Add(AValue: THashVector); overload;
+//    destructor Destroy; override;
+//  end;
+
+//------------------------------------------------------------------------------
+//! запись в файле графов "дороги"
+//------------------------------------------------------------------------------
+  PEdge = ^TEdge;
+
+  TEdge = packed record
+    //! гео-хэш вектора начало/конец
+    HashVector: THashVector;  // 16
+    //! гео-координаты начала
+    CoordsFrom: TGeoPos;      // 32
+    //! гео-координаты конца
+    CoordsTo: TGeoPos;        // 48
+    //! длина дороги, км
+    Distance: Double;         // 56
+    //! максимальная скорость на дороге, км/ч
+    MaxSpeed: Integer;        // 60
+    //! тип дороги
+    RoadType: Integer;        // 64
+    //! индекс в файле списка дорог ".list_*"
+    LinkIndex: Integer;       // 68
+    //! количество дорог в файле списка дорог ".list_*"
+    LinkCount: Integer;       // 72
+    //! индекс в файле промежуточных точек ".way" (-1 если их нет)
+    WayIndex: Integer;        // 76
+    //! количество промежуточных точек ".way" (может быть 0)
+    WayCount: Integer;        // 80
+    //! ID
+    ID: Int64;                // 88
+    function EqualRouteID(ARouteID: TIDLines): Boolean;
+  end;
+
+  TEdgeArray = TArray<TEdge>;
+
+  TEdgeDictionary = TDictionary<THashVector, Integer>;
+
+  TEdgeDictionaryList = class(TDictionary<Int64, TList<Integer>>)
+  protected
+    procedure ValueNotify(const Item: TList<Integer>; Action: TCollectionNotification); override;
+  public
+    procedure Add(const AFrom: Int64; const AIdx: Integer);
+  end;
+
+//------------------------------------------------------------------------------
+//! TBD
+//------------------------------------------------------------------------------
+  PZoneControl = ^TZoneControl;
+
+  TZoneControl =  UInt64;
+
+  TZoneControlArray = TArray<TZoneControl>;
+
+//------------------------------------------------------------------------------
+//! TBD
+//------------------------------------------------------------------------------
+  PSignControl = ^TSignControl;
+
+  TSignControl =  UInt64;
+
+  TSignControlArray = TArray<TSignControl>;
+
+//------------------------------------------------------------------------------
+//! TBD
+//------------------------------------------------------------------------------
+  PWayPoint = ^TWayPoint;
+
+  TWayPoint = TGeoPos;
+
+  TWayPointArray = TArray<TWayPoint>;
+
+//------------------------------------------------------------------------------
+//! TBD
+//------------------------------------------------------------------------------
+  PSpeedControl = ^TSpeedControl;
+
+  //7 дней недели, 4 части суток.
+  //Пишем округленную скорость если есть, если нет, то из edge
+  TTimePeriods = (tpNight, tpMorning, tpDay, tpEvening);
+
+  TSpeedTimePeriod = array [TTimePeriods] of Byte;
+
+  TSpeedControl = packed record
+    SpeedWeekDays: array [DayMonday..DaySunday] of TSpeedTimePeriod;
+  end;
+
+  TSpeedControlArray = TArray<TSpeedControl>;
+
+//------------------------------------------------------------------------------
+//! расширения файлов графов
+//------------------------------------------------------------------------------
+type
+  TFileType = (
+    ftEdgeF, ftEdgeB, ftListF, ftListB, ftWay,
+    ftZCF, ftZCB, ftSCF, ftSCB, ftSpeed
+  );
+
+  TFileTypeSet = set of TFileType;
+
+const
+  CFileType: array[TFileType] of string = (
+    '.edge_f',
+    '.edge_b',
+    '.list_f',
+    '.list_b',
+    '.way',
+    '.zc_f',
+    '.zc_b',
+    '.signs_f',
+    '.signs_b',
+    '.speed'
+  );
+
+//------------------------------------------------------------------------------
+implementation
+
+{ THashVector }
+
+class operator THashVector.Equal(a, b: THashVector): Boolean;
+begin
+  Result :=
+    (a.HashFrom = b.HashFrom) and
+    (a.HashTo = b.HashTo);
+end;
+
+class operator THashVector.NotEqual(a, b: THashVector): Boolean;
+begin
+  Result := not (a = b);
+end;
+
+function THashVector.Reverse: THashVector;
+begin
+  Result.HashFrom := HashTo;
+  Result.HashTo := HashFrom;
+end;
+
+function THashVector.ToComplexString: string;
+var
+  PF, PT: TGeoPos;
+begin
+  PF := PointFrom;
+  PT := PointTo;
+  Result := Format('[%.16x - %.16x] = [%s - %s] = [%.10f, %.10f - %.10f, %.10f]', [
+    HashFrom, HashTo,
+    TGeoHash.ConvertBinToString(HashFrom, 12), TGeoHash.ConvertBinToString(HashTo, 12),
+    PF.Latitude, PF.Longitude, PT.Latitude, PT.Longitude
+  ]);
+end;
+
+function THashVector.TruncateToByte: Byte;
+begin
+  Result := (HashFrom and $0F) shl 4;
+  Result :=  Result + (HashTo and $0F);
+end;
+
+function THashVector.PointFrom: TGeoPos;
+begin
+  Result := TGeoHash.DecodePointBin(HashFrom);
+end;
+
+function THashVector.PointTo: TGeoPos;
+begin
+  Result := TGeoHash.DecodePointBin(HashTo);
+end;
+
+function THashVector.AzimuthFits(const aAzimuth, aTolerance: Double): Boolean;
+var
+  d: Double;
+  daz: Double;
+begin
+  d := Abs(Azimuth - aAzimuth);
+  daz := IfThen(d > 180, 360 - d, d);
+  Result := daz <= aTolerance;
+end;
+
+function THashVector.AzimuthDiff(const aAzimuth: Double): Double;
+var
+  d, z: Double;
+begin
+  d := aAzimuth - Azimuth;
+  z := IfThen(d < -180, d + 360, d);
+  Result := IfThen(z > 180, d - 360, z);
+end;
+
+constructor THashVector.Create(const ASP, ATP: TGeoPos);
+begin
+  HashFrom := ASP.ToHash;
+  HashTo := ATP.ToHash;
+end;
+
+function THashVector.Azimuth: Double;
+begin
+  Result :=
+    TGeoCalcs.GetAzimuthDeg(
+      TGeoHash.DecodePointBin(HashFrom),
+      TGeoHash.DecodePointBin(HashTo));
+end;
+
+function THashVector.FitBBox(const AV: THashVector): Boolean;
+//var
+//  f,t: TGeoPos;
+begin
+  Result := True;
+{
+  f.Latitude := Min(PointFrom.Latitude, PointTo.Latitude);
+  f.Longitude := Min(PointFrom.Longitude, PointTo.Longitude);
+  t.Latitude := Max(PointFrom.Latitude, PointTo.Latitude);
+  t.Longitude := Max(PointFrom.Longitude, PointTo.Longitude);
+
+  Result :=
+    (f.Latitude <= AV.PointFrom.Latitude) and (AV.PointFrom.Latitude <= t.Latitude) and
+    (f.Longitude <= AV.PointFrom.Longitude) and (AV.PointFrom.Longitude <= t.Longitude) and
+    (f.Latitude <= AV.PointTo.Latitude) and (AV.PointTo.Latitude <= t.Latitude) and
+    (f.Longitude <= AV.PointTo.Longitude) and (AV.PointTo.Longitude <= t.Longitude);
+}
+end;
+
+
+
+function THashVector.HashStr: string;
+begin
+  Result := TGeoHash.EncodePointString(PointFrom, 12) + '-' + TGeoHash.EncodePointString(PointTo, 12);
+end;
+
+{ TEdgeDictionaryList }
+
+procedure TEdgeDictionaryList.Add(const AFrom: Int64; const AIdx: Integer);
+begin
+  if not Self.ContainsKey(AFrom) then
+    inherited Add(AFrom, TList<Integer>.Create);
+
+  Items[AFrom].Add(AIdx);
+end;
+
+procedure TEdgeDictionaryList.ValueNotify(const Item: TList<Integer>; Action: TCollectionNotification);
+begin
+  if (Action <> cnAdded) then
+    Item.Free();
+end;
+
+{ TEdge }
+
+function TEdge.EqualRouteID(ARouteID: TIDLines): Boolean;
+begin
+  Result := (ID = ARouteID.OSM_ID) and
+            (HashVector.HashFrom = ARouteID.HashStart) and
+            (HashVector.HashTo = ARouteID.HashEnd);
+end;
+
+end.
+
+
